@@ -9,6 +9,8 @@ local dynamic = ls.dynamic_node
 local events = require("luasnip.util.events")
 local snip_node = ls.snippet_node
 
+local lsp_format = vim.lsp.buf.format
+
 local M = {
 
 	snip({ trig = "fnnil" }, {
@@ -24,7 +26,11 @@ local M = {
 		callbacks = {
 			[0] = {
 				[events.enter] = function(node, _event_args)
-					vim.lsp.buf.formatting()
+					lsp_format({
+						filter = function(client)
+							return client.name == "null-ls"
+						end,
+					})
 				end,
 			},
 		},
@@ -45,7 +51,59 @@ local M = {
 		callbacks = {
 			[0] = {
 				[events.enter] = function(node, _event_args)
-					vim.lsp.buf.formatting()
+					lsp_format({
+						filter = function(client)
+							return client.name == "null-ls"
+						end,
+					})
+				end,
+			},
+		},
+	}),
+
+	snip({ trig = "pfnnil" }, {
+		text("pub fn "),
+		insert(1, "FuncName"),
+		text("("),
+		insert(2, "Args..."),
+		text({ "){", "" }),
+		text({ '\tunimplemented!("unimplemented");', "" }),
+		text("}"),
+		insert(0),
+	}, {
+		callbacks = {
+			[0] = {
+				[events.enter] = function(node, _event_args)
+					lsp_format({
+						filter = function(client)
+							return client.name == "null-ls"
+						end,
+					})
+				end,
+			},
+		},
+	}),
+
+	snip({ trig = "pfnret" }, {
+		text("pub fn "),
+		insert(1, "FuncName"),
+		text("("),
+		insert(2, "Args..."),
+		text(") -> "),
+		insert(3, "RetType"),
+		text({ "{", "" }),
+		text({ '\tunimplemented!("unimplemented");', "" }),
+		text({ "}" }),
+		insert(0),
+	}, {
+		callbacks = {
+			[0] = {
+				[events.enter] = function(node, _event_args)
+					lsp_format({
+						filter = function(client)
+							return client.name == "null-ls"
+						end,
+					})
 				end,
 			},
 		},
@@ -63,7 +121,11 @@ local M = {
 		callbacks = {
 			[0] = {
 				[events.enter] = function(node, _event_args)
-					vim.lsp.buf.formatting()
+					lsp_format({
+						filter = function(client)
+							return client.name == "null-ls"
+						end,
+					})
 				end,
 			},
 		},
@@ -87,7 +149,11 @@ local M = {
 		callbacks = {
 			[0] = {
 				[events.enter] = function(node, _event_args)
-					vim.lsp.buf.formatting()
+					lsp_format({
+						filter = function(client)
+							return client.name == "null-ls"
+						end,
+					})
 				end,
 			},
 		},
@@ -114,7 +180,11 @@ local M = {
 		callbacks = {
 			[0] = {
 				[events.enter] = function(node, _event_args)
-					vim.lsp.buf.formatting()
+					lsp_format({
+						filter = function(client)
+							return client.name == "null-ls"
+						end,
+					})
 				end,
 			},
 		},
@@ -165,6 +235,7 @@ local M = {
 	}, {
 		text({ "#[cfg(test)]", "" }),
 		text({ "mod tests{", "" }),
+		text({ "\tuse super::*;", "" }),
 		text({ "\t#[test]", "" }),
 		text({ "\tfn basics(){", "" }),
 		text({ '\t\tunreachable!("impl it")', "" }),
@@ -175,7 +246,11 @@ local M = {
 		callbacks = {
 			[0] = {
 				[events.enter] = function(node, _event_args)
-					vim.lsp.buf.formatting()
+					lsp_format({
+						filter = function(client)
+							return client.name == "null-ls"
+						end,
+					})
 				end,
 			},
 		},
