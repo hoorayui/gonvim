@@ -91,6 +91,13 @@ return require("packer").startup(function()
 		end,
 	})
 
+	use({
+		"shellRaining/hlchunk.nvim",
+		config = function()
+			require("plugins.hlchunk").setup()
+		end,
+	})
+
 	------------------------------------------------
 	----      Language Functional ,          -------
 	------------------------------------------------
@@ -250,14 +257,6 @@ return require("packer").startup(function()
 		end,
 	})
 
-	use({
-		"lvimuser/lsp-inlayhints.nvim",
-		branch = "anticonceal",
-		config = function()
-			require("plugins.inlayhints").setup()
-		end,
-	})
-
 	----------------------------------------------------------------
 	----      Dap Debugger
 	----------------------------------------------------------------
@@ -332,6 +331,13 @@ return require("packer").startup(function()
 		"stevearc/dressing.nvim",
 		config = function()
 			require("plugins.dressigns").setup()
+		end,
+	})
+
+	use({
+		"anuvyklack/pretty-fold.nvim",
+		config = function()
+			require("plugins.fold").setup()
 		end,
 	})
 
