@@ -128,6 +128,7 @@ local plugins = {
 	},
 	{
 		"windwp/nvim-autopairs",
+        -- commit = "fa6876f832ea1b71801c4e481d8feca9a36215ec",
 		config = function()
 			require("plugins.autopairs").setup()
 		end,
@@ -177,8 +178,7 @@ local plugins = {
 		end,
 	},
 	{ -- null lsp
-		-- "jose-elias-alvarez/null-ls.nvim",
-		"3Xpl0it3r/null-ls.nvim",
+		"nvimtools/none-ls.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = function()
 			require("plugins.null-ls").setup()
@@ -245,6 +245,12 @@ local plugins = {
 		"stevearc/dressing.nvim",
 		opts = require("plugins.dressing").new_options(),
 	},
+
+	-- api
+	--[[ {
+		"Exafunction/codeium.vim",
+		event = "BufEnter",
+	}, ]]
 }
 
 require("lazy").setup(plugins, require("plugins.lazy").new_options())

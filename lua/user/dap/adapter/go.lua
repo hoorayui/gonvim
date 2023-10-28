@@ -1,12 +1,30 @@
 local M = {}
 
-local file_utils = require("utils.files")
+local path = require("utils.path")
 local notify_utils = require("utils.notify")
 local lsputil = require("lspconfig/util")
 
 --[[ local pickers = require "telescope.pickers"
 local finders = require "telescope.finders"
 local conf = require("telescope.config").values ]]
+
+local get_mod_name = function(root_dir)
+	local mod_abs = root_dir .. "/go.mod"
+	local file = io.open(mod_abs, "r")
+	if file then
+		local content = file:read("*a")
+		file:close()
+
+		-- 使用正则表达式匹配mod后面的名称
+		local moduleName = string.match(content, "module%s+(%S+)")
+		if moduleName == "main" then
+			return nil
+		end
+		return moduleName
+	else
+		return nil
+	end
+end
 
 local get_buffer_list = function()
 	local results = {}
@@ -87,11 +105,11 @@ M.configurations = {
 		end,
 		program = function()
 			return coroutine.create(function(dap_run_co)
-				local pkgs = file_utils.readlines("go.debug")
+				local pkgs = path.read_file("go.debug")
 				if pkgs == nil or #pkgs == 0 then
 					vim.ui.input({ prompt = "[Dap] Input Package Name" }, function(pkg_name)
 						local full_path = vim.fn.resolve(vim.fn.getcwd() .. "/" .. pkg_name)
-						if file_utils.dir_exists(full_path) ~= true then
+						if path.exists(full_path) ~= true then
 							notify_utils.notify("Package " .. pkg_name .. " is not existed", "error", "[Dap: Go]")
 						end
 						coroutine.resume(dap_run_co, pkg_name)
@@ -122,8 +140,18 @@ M.configurations = {
 		name = "Debug test (go.mod)",
 		request = "launch",
 		mode = "test",
-		program = "./${relativeFileDirname}",
-		-- extra_command_args
+		program = function()
+			-- got prject root abs dirname ; eg /home/l0calh0st/gopath/project1
+			local root_dir = vim.lsp.buf.list_workspace_folders()[1]
+			-- got subpath
+			local relative = string.gsub(vim.fn.expand("%:p:h"), root_dir, "")
+			-- got mod name from go.mod, eg :example.com
+			local mod_name = get_mod_name(root_dir)
+			if mod_name == nil then
+				return relative
+			end
+			return mod_name .. relative
+		end,
 	},
 }
 

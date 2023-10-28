@@ -81,11 +81,15 @@ M.normal = {
 		},
 		u = { "<cmd>lua require('aerial').toggle()<cr>", "outline(aerial)" },
 	},
+
 	-- book marks
 	m = {
 		name = "+BookMarks",
-		c = { "<cmd>delmarks 0-9a-z<cr>", "Clean All" },
+		a = { "<cmd>lua require('ext.bookmarks').add()<cr>", "Add BookMarks" },
+		c = { "<cmd>lua require('ext.bookmarks').clean_all()<cr>", "Clean All" },
+		l = { "<cmd>lua require('ext.bookmarks').operator()<cr>", "Add a Bookmarks" },
 	},
+
 	-- Plugin Manager
 	p = {
 		name = "+Plugins",
