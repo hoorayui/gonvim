@@ -94,7 +94,7 @@ local jump_to_file = function(filename, line)
 	vim.cmd('execute  "normal! zz"')
 end
 
-function M.operator()
+function M.actions()
 	local title = "BookMarks" -- Define notify tile
 
 	local root_dir = vim.lsp.buf.list_workspace_folders()
@@ -134,8 +134,8 @@ function M.operator()
 					local bk_item = map.get(registry["registry"], entry[1])
 
 					local display = entry[1]
-					if #entry[1] <= SIZE_TXT then
-						for _ = 1, SIZE_TXT - #entry[1], 1 do
+					if vim.fn.strdisplaywidth(entry[1]) <= SIZE_TXT then
+						for _ = 1, SIZE_TXT - vim.fn.strdisplaywidth(entry[1]), 1 do
 							display = display .. " "
 						end
 					end
