@@ -8,6 +8,50 @@ local icons = require("ui.icons")
 
 local M = {}
 
+local formatting_style = {
+	-- fields = { "kind", "abbr", "menu" },
+	fields = { "abbr", "kind", "menu" },
+
+	format = function(entry, item)
+		local icon = icons.lspKind[item.kind]
+		-- icon = icons.lspKind.Text and (" " .. icon .. " ") or icon
+		local max_width = 64
+
+		if item.menu ~= nil then
+			item.menu = string.gsub(item.menu, "^%s+", "")
+
+			if string.sub(item.menu, 1, string.len("(")) == "(" then
+				item.menu = item.menu:sub(1, item.menu:find(")", 1, true))
+			end
+			if max_width ~= 0 and #item.menu > max_width then
+				item.menu = string.sub(item.menu, 1, max_width - 1) .. "…"
+			end
+		else
+			item.menu = ({
+				nvim_lsp = "(LSP)",
+				treesitter = "(TS)",
+				emoji = "(Emoji)",
+				path = "(Path)",
+				calc = "(Calc)",
+				cmp_tabnine = "(Tabnine)",
+				vsnip = "(Snippet)",
+				luasnip = "(Snippet)",
+				buffer = "(Buffer)",
+				spell = "(Spell)",
+			})[entry.source.name]
+		end
+
+		item.kind = string.format("%s  %s", icon, icons.lspKind.Text and item.kind or " ")
+		item.dup = ({
+			buffer = 1,
+			path = 1,
+			nvim_lsp = 1,
+			luasnip = 1,
+		})[entry.source.name] or 0
+		return item
+	end,
+}
+
 local function config_nvim_cmp(cmp)
 	local cmp_config = {
 		apperance = {
@@ -28,36 +72,7 @@ local function config_nvim_cmp(cmp)
 			ghost_text = false,
 			native_menu = false,
 		},
-		formatting = {
-			-- fields = { "kind", "abbr", "menu" },
-			fields = { "kind", "abbr", "menu" },
-			format = function(entry, vim_item)
-				local max_width = 0
-				if max_width ~= 0 and #vim_item.abbr > max_width then
-					vim_item.abbr = string.sub(vim_item.abbr, 1, max_width - 1) .. "…"
-				end
-				vim_item.kind = icons.lspKind[vim_item.kind]
-				vim_item.menu = ({
-					nvim_lsp = "(LSP)",
-					treesitter = "(TS)",
-					emoji = "(Emoji)",
-					path = "(Path)",
-					calc = "(Calc)",
-					cmp_tabnine = "(Tabnine)",
-					vsnip = "(Snippet)",
-					luasnip = "(Snippet)",
-					buffer = "(Buffer)",
-					spell = "(Spell)",
-				})[entry.source.name]
-				vim_item.dup = ({
-					buffer = 1,
-					path = 1,
-					nvim_lsp = 0,
-					luasnip = 1,
-				})[entry.source.name] or 0
-				return vim_item
-			end,
-		},
+		formatting = formatting_style,
 		snippet = {
 			expand = function(args)
 				require("luasnip").lsp_expand(args.body)

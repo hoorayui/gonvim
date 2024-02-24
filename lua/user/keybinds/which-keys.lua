@@ -7,7 +7,7 @@ M.normal = {
 	["f"] = { "<cmd>lua require'telescope.builtin'.find_files()<cr>", "FindFile" },
 	["n"] = { "<cmd>Neotree toggle reveal<CR>", "DirExploer" },
 	["q"] = { "<cmd>q!<CR>", "Quit" },
-    -- test
+	-- test
 	["z"] = { "<cmd>lua require'tsexample'.test()<cr>", "TestTS" },
 
 	-- code runner
@@ -28,14 +28,22 @@ M.normal = {
 	g = {
 		name = "+Git",
 		b = { '<cmd>lua require"gitsigns".blame_line{}<CR>', "Blame" },
-		d = { '<cmd>lua require"gitsigns".diffthis("~")<CR>', "Diff" },
+		-- d = { '<cmd>lua require"gitsigns".diffthis("~")<CR>', "Diff" },
 		p = { '<cmd>lua require"gitsigns".preview_hunk()<CR>', "preview(Hunk)" },
 		r = { '<cmd>lua require"gitsigns".reset_hunk()<CR>', "Reset(Hunk)" },
 		R = { '<cmd>lua require"gitsigns".reset_buffer()<CR>', "Reset(Buffer)" },
-		s = { '<cmd>lua require"gitsigns".stage_hunk()<CR>', "State hunk" },
-		S = { '<cmd>lua require"gitsigns".stage_buffer()<CR>', "Stage(Buffer)" },
+		--[[ s = { '<cmd>lua require"gitsigns".sedatage_hunk()<CR>', "State hunk" },
+		S = { '<cmd>lua require"gitsigns".stage_buffer()<CR>', "Stage(Buffer)" }, ]]
 		u = { '<cmd>lua require"gitsigns".undo_stage_hunk()<CR>}', "Undo Stage Hunk" },
 		U = { '<cmd>lua require"gitsigns".reset_buffer_index()<CR>', "Reset(Buffer Index)" },
+
+		q = { '<cmd>lua require"ext.git.init".quit()<CR>', "Quit" },
+
+
+		d = { '<cmd>lua require"ext.git.init".diff()<CR>', "Diff" },
+		s = { '<cmd>lua require"ext.git.init".status()<CR>', "Git status" },
+		l = { '<cmd>lua require"ext.git.init".history()<CR>', "Git History" },
+		B = { '<cmd>lua require"ext.git.init".branch()<CR>', "Git History" },
 	},
 
 	h = {
@@ -63,7 +71,7 @@ M.normal = {
 		d = { "<cmd>lua require('telescope.builtin').lsp_definitions({show_line=false})<cr>", "Define" },
 		D = { "<cmd>lua require('telescope.builtin').lsp_type_definitions({show_line = false})<cr>", "TypeDefine" },
 		e = { "<cmd>lua require('telescope.builtin').diagnostics()<cr>", "diagnostics" },
-		f = { "<cmd>lua vim.lsp.buf.formatting({async=true})<cr>", "LspFormat" },
+		f = { "<cmd>lua vim.lsp.buf.format({async=true})<cr>", "LspFormat" },
 		i = { "<cmd>lua require('telescope.builtin').lsp_implementations({show_line = false})<cr>", "Interface" },
 		r = { "<cmd>lua require('telescope.builtin').lsp_references({show_line = false})<cr>", "Reference" },
 		s = {
