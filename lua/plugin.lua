@@ -164,11 +164,13 @@ local plugins = {
 			require("plugins.cmp").setup()
 		end,
 		dependencies = {
-			{ "hrsh7th/cmp-path" }, -- path completion plugin
 			{ "hrsh7th/cmp-buffer" }, -- buffer completion plugin
-			{ "hrsh7th/cmp-nvim-lsp" }, -- lsp
+			{ "hrsh7th/cmp-path" }, -- path completion plugin
 			{ "hrsh7th/cmp-cmdline" },
 			{ "saadparwaiz1/cmp_luasnip" }, -- completete for snippets
+			{ "hrsh7th/cmp-nvim-lsp" }, -- lsp
+
+			{ "windwp/nvim-autopairs" }, -- for auto complete pairs
 		},
 	},
 	{
@@ -197,6 +199,7 @@ local plugins = {
 	----------------------------------------------------------------
 	{
 		"mfussenegger/nvim-dap",
+		dependencies = "nvim-neotest/nvim-nio",
 		config = function()
 			require("plugins.dap").setup()
 		end,
@@ -249,7 +252,6 @@ local plugins = {
 		"stevearc/dressing.nvim",
 		opts = require("plugins.dressing").new_options(),
 	},
-
 }
 
 require("lazy").setup(plugins, require("plugins.lazy").new_options())

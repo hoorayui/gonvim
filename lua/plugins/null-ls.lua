@@ -6,6 +6,7 @@ end
 
 local M = {}
 
+
 local function config_null_ls(null_ls)
 	local opts = {
 		cmd = { "nvim" },
@@ -23,10 +24,7 @@ local function config_null_ls(null_ls)
 		root_dir = require("null-ls.utils").root_pattern(".null-ls-root", "Makefile", ".git", "go.mod", "Cargo.toml"),
 		sources = {
 			null_ls.builtins.formatting.goimports,
-			null_ls.builtins.formatting.rustfmt,
 			null_ls.builtins.formatting.stylua,
-			null_ls.builtins.formatting.autopep8,
-			null_ls.builtins.formatting.clang_format,
 		},
 		update_in_insert = false,
 	}
@@ -35,9 +33,15 @@ end
 
 function M.setup()
 	local null_ls = require("null-ls")
+    -- register codeaction
 	for _, code_actions in pairs(require("user.null-ls.code-actions").sources()) do
 		null_ls.register(code_actions)
 	end
+
+    -- custom formater
+    for _, formater in pairs(require("user.null-ls.formaters").sources()) do
+        null_ls.register(formater)
+    end
 
 	config_null_ls(null_ls)
 end
