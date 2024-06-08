@@ -1,8 +1,12 @@
-local M = {}
 local format_notify = require("utils.notify")
+local kubernetes = require("user.null-ls.code-actions.ecosystem.kubernetes")
+local g_utils_shell = require("utils.shell")
+
+local M = {}
 
 local action_go_vendor = function()
-	require("utils.notify").notify_execute_command({ "go", "mod", "vendor" })
+	g_utils_shell.execute("go mod tidy && go mod vendor", "vertical")
+	-- require("utils.notify").notify_execute_command({ "go", "mod", "vendor" })
 	vim.cmd("LspRestart")
 end
 
@@ -35,12 +39,12 @@ local action_go_gentest = function()
 	)
 end
 
-local action_k8s_mod_download = function()
+local action_kubernetes_mod = function()
 	vim.ui.input({ prompt = "Input Kubernetes Version" }, function(k8s_version)
 		if not k8s_version then
 			return
 		end
-		local all_k8s_mod = vim.fn.K8sAllModules(k8s_version)
+		local all_k8s_mod = kubernetes.all_modes(k8s_version)
 		if all_k8s_mod == vim.NIL then
 			format_notify.notify("code action [Golang] fetch all k8s pkg failed", "error", "null-ls")
 			return
@@ -50,10 +54,7 @@ local action_k8s_mod_download = function()
 			if not choice then
 				return
 			end
-			local res = vim.fn.K8sModDownload(choice, k8s_version)
-			if res == "Ok" then
-				format_notify.notify("Add " .. choice .. "@" .. k8s_version .. "Successfully", "info", "null-ls")
-			end
+			kubernetes.download(choice, k8s_version)
 		end)
 	end)
 end
@@ -134,7 +135,7 @@ function M.sources()
 					},
 					{
 						title = "Kubernetes Mod",
-						action = action_k8s_mod_download,
+						action = action_kubernetes_mod,
 					},
 				}
 			end,

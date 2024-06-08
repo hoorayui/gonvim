@@ -15,9 +15,6 @@ M.normal = {
 		name = "+Code",
 		-- asm  反汇编
 		a = { "<cmd>lua vim.lsp.buf.code_action()<CR>", "CodeAction" },
-		c = { "<cmd>lua require 'ext.compiler.init'.compile()<cr>", "Compile" },
-		C = { "<cmd>lua require 'ext.compiler.init'.set_compiler()<cr>", "Set Compile" },
-		t = { "<cmd>TroubleToggle<CR>", "Problems" },
 		r = { "<cmd>lua require'sniprun'.run()<cr>", "SnipRun" },
 	},
 
@@ -40,33 +37,14 @@ M.normal = {
 		u = { '<cmd>lua require"gitsigns".undo_stage_hunk()<CR>}', "Undo Stage Hunk" },
 		U = { '<cmd>lua require"gitsigns".reset_buffer_index()<CR>', "Reset(Buffer Index)" },
 
-		q = { '<cmd>lua require"ext.git.init".quit()<CR>', "Quit" },
+		q = { '<cmd>lua require"extensions.git.init".quit()<CR>', "Quit" },
 
-		d = { '<cmd>lua require"ext.git.init".diff()<CR>', "Diff" },
-		s = { '<cmd>lua require"ext.git.init".status()<CR>', "Git status" },
-		l = { '<cmd>lua require"ext.git.init".history()<CR>', "Git History" },
-		B = { '<cmd>lua require"ext.git.init".branch()<CR>', "Git History" },
+		d = { '<cmd>lua require"extensions.git.init".diff()<CR>', "Diff" },
+		s = { '<cmd>lua require"extensions.git.init".status()<CR>', "Git status" },
+		l = { '<cmd>lua require"extensions.git.init".history()<CR>', "Git History" },
+		B = { '<cmd>lua require"extensions.git.init".branch()<CR>', "Git History" },
 	},
 
-	h = {
-		name = "+Hop",
-		l = {
-			"<cmd>lua require('hop').hint_patterns({direction = require('hop.hint').HintDirection.AFTER_CURSOR,  current_line_only = true})<cr>",
-			"Search Left Part",
-		},
-		h = {
-			"<cmd>lua require('hop').hint_patterns({direction = require('hop.hint').HintDirection.BEFORE_CURSOR, current_line_only = true})<cr>",
-			"Search Right Part",
-		},
-		j = {
-			"<cmd>lua require('hop').hint_patterns({direction = require('hop.hint').HintDirection.AFTER_CURSOR,  current_line_only = false})<cr>",
-			"Search Below Part",
-		},
-		k = {
-			"<cmd>lua require('hop').hint_patterns({direction = require('hop.hint').HintDirection.BEFORE_CURSOR, current_line_only = false})<cr>",
-			"Search Upper Part",
-		},
-	},
 	l = {
 		name = "+Lsp",
 		c = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Change(Rename)" },
@@ -74,32 +52,23 @@ M.normal = {
 		D = { "<cmd>lua require('telescope.builtin').lsp_type_definitions({show_line = false})<cr>", "TypeDefine" },
 		e = { "<cmd>lua require('telescope.builtin').diagnostics()<cr>", "diagnostics" },
 		f = { "<cmd>lua vim.lsp.buf.format({async=true})<cr>", "LspFormat" },
+		-- for inlay hints
+		h = {
+			"<cmd>lua vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())<cr>",
+			"Inlay Hints(nvim>=0.10)",
+		},
+
 		i = { "<cmd>lua require('telescope.builtin').lsp_implementations({show_line = false})<cr>", "Interface" },
 		r = { "<cmd>lua require('telescope.builtin').lsp_references({show_line = false})<cr>", "Reference" },
-		s = {
-			function()
-				local aerial_avail, _ = pcall(require, "aerial")
-				if aerial_avail then
-					require("telescope").extensions.aerial.aerial()
-				else
-					require("telescope.builtin").lsp_document_symbols()
-				end
-			end,
-			"Symbol(doc)",
-		},
-		S = {
-			"<cmd>lua require('telescope.builtin').lsp_workspace_symbols(show_line = false)<cr>",
-			"Symbol(workspace)",
-		},
-		u = { "<cmd>lua require('aerial').toggle()<cr>", "outline(aerial)" },
+		t = { "<cmd>lua require('telescope.builtin').diagnostics()<cr>", "Trouble" },
 	},
 
 	-- book marks
 	m = {
 		name = "+BookMarks",
-		a = { "<cmd>lua require('ext.bookmarks').add()<cr>", "Add BookMarks" },
-		c = { "<cmd>lua require('ext.bookmarks').clean_all()<cr>", "Clean All" },
-		l = { "<cmd>lua require('ext.bookmarks').actions()<cr>", "Add a Bookmarks" },
+		a = { "<cmd>lua require('extensions.bookmarks').add()<cr>", "Add BookMarks" },
+		c = { "<cmd>lua require('extensions.bookmarks').clean_all()<cr>", "Clean All" },
+		l = { "<cmd>lua require('extensions.bookmarks').actions()<cr>", "List Bookmarks" },
 	},
 
 	-- Plugin Manager
@@ -121,18 +90,18 @@ M.normal = {
 		g = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "FindText" },
 		p = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "Project" },
 		t = { "<cmd>lua require('telescope.builtin').treesitter()<cr>", "Treesitter" },
-		u = { "<cmd>lua require('aerial').toggle()<cr>", "outline(aerial)" },
 	},
 
 	-- unit test
 	t = {
 		name = "+UintTest",
-		d = { '<cmd>lua require("neotest").diagnostic()<CR>', "diagnostic" },
-		p = { '<cmd>lua require("neotest").output.open()<CR>', "print" },
+		-- Debug the neartest test(require nvim-dap and adapter support)
+		d = { '<cmd>lua require("neotest").run.run({strategy = "dap"})<CR>', "Debug neartest" },
+		-- run the nearest test
 		r = { '<cmd>lua require("neotest").run.run()<CR>', "Run" },
+		-- run the current file
 		R = { '<cmd>lua require("neotest").run.run(vim.fn.expand("%"))<CR>', "Run" },
 		s = { '<cmd>lua require("neotest").summary.toggle()<CR>', "Summary" },
-		S = { '<cmd>lua require("neotest").status.toggle()<CR>', "SingStatus" },
 	},
 
 	-- windows / misc
@@ -150,8 +119,6 @@ M.visual = {
 	-- code runner
 	c = {
 		name = "+Code",
-		a = { "<cmd>lua require 'ext.compiler.init'.compile()<cr>", "Compile" },
-		C = { "<cmd>lua require 'ext.compiler.init'.set_compiler()<cr>", "Set Compile" },
 		r = { "<cmd>lua require'sniprun'.run('v')<cr>", "sniprun" },
 	},
 	g = {

@@ -124,13 +124,14 @@ M.on_attach = function()
 		if lsp_signature_avail then
 			lsp_signature.on_attach()
 		end
-		-- vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-		if client.supports_method("textDocument/semanticTokens") then
-			client.server_capabilities.semanticTokensProvider = nil
-		end
 
-        if vim.fn.has("nvim-0.10") == 1 and client.server_capabilities.inlayHintProvider then
-			vim.lsp.inlay_hint.enable(0, true)
+        -- for codelens
+        if client.supports_method("textDocument/codeLens") then
+            vim.lsp.codelens.refresh()
+            vim.api.nvim_create_autocmd({"BufEnter", "CursorHold", "InsertLeave"}, {
+                buffer = buffer,
+                callback = vim.lsp.codelens.refresh,
+            })
         end
 
 		lsp_keymaps(bufnr)

@@ -1,5 +1,6 @@
-vim.cmd("colorscheme kanagawa")
--- vim.cmd("colorscheme tokyonight")
+-- vim.cmd("colorscheme catppuccin-mocha")
+-- vim.cmd("colorscheme flexoki-dark")
+vim.cmd("colorscheme tokyonight")
 -- vim.cmd("colorscheme catppuccin-mocha")
 
 vim.cmd([[
