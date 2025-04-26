@@ -20,6 +20,7 @@ local plugins = {
     ----      ColorsTheme , UI               -------
     ------------------------------------------------
     {
+        -- 主题优先加载, 防止后面覆盖自定义的配色
         "folke/tokyonight.nvim",
         --[[ "rebelot/kanagawa.nvim",
         "catppuccin/nvim",
@@ -47,11 +48,6 @@ local plugins = {
         config = function()
             require("plugins.lualine")
         end,
-    },
-
-    {
-        "gen740/SmoothCursor.nvim",
-        opts = require("plugins.smoothcursor").new_options(),
     },
 
     {
@@ -153,13 +149,13 @@ local plugins = {
             require("plugins.cmp").setup()
         end,
         dependencies = {
-            { "hrsh7th/cmp-buffer" }, -- buffer completion plugin
-            { "hrsh7th/cmp-path" }, -- path completion plugin
+            { "hrsh7th/cmp-buffer" },       -- buffer completion plugin
+            { "hrsh7th/cmp-path" },         -- path completion plugin
             { "hrsh7th/cmp-cmdline" },
             { "saadparwaiz1/cmp_luasnip" }, -- completete for snippets
-            { "hrsh7th/cmp-nvim-lsp" }, -- lsp
+            { "hrsh7th/cmp-nvim-lsp" },     -- lsp
 
-            { "windwp/nvim-autopairs" }, -- for auto complete pairs
+            { "windwp/nvim-autopairs" },    -- for auto complete pairs
         },
     },
     {
@@ -228,8 +224,44 @@ local plugins = {
     },
 
     ----------------------------------------------------------------
+    ----      LLM
+    ----------------------------------------------------------------
+    --[[ {
+        "yetone/avante.nvim",
+        event = "VeryLazy",
+        lazy = false,
+        version = false, -- set this if you want to always pull the latest change
+        opts = require("plugins.llm.avater").new_options(),
+        build = "make",
+        dependencies = {
+            "nvim-treesitter/nvim-treesitter",
+            "stevearc/dressing.nvim",
+            "nvim-lua/plenary.nvim",
+            "MunifTanjim/nui.nvim",
+        }
+    }, ]]
+
+    {
+        "olimorris/codecompanion.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+        },
+        config = function()
+            require("plugins.llm.codecompanion").setup()
+        end
+    },
+
+    ----------------------------------------------------------------
     ----      Some Misc Plugin (but should placed at the end)
     ----------------------------------------------------------------
+    {
+        "xzbdmw/colorful-menu.nvim",
+        config = function()
+            require("colorful-menu").setup({ max_width = 64, })
+        end
+    },
+    ---
     { "wakatime/vim-wakatime" },
 
     { -- which key
